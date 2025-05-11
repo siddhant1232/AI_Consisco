@@ -76,6 +76,7 @@ export default function UploadForm() {
       setIsLoading(false);
     }
   };
+
   return (
     <div>
       <UploadFormInput 

@@ -76,3 +76,7 @@ export async function generatePDFSummary(uploadResponse: any[]): Promise<Summary
     };
   }
 }
+
+export async function storePdfSummaryAction(){
+
+}

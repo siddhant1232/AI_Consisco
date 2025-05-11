@@ -8,7 +8,7 @@ export const generateSummaryFromOpenAI = async (pdfText: string, retries = 3): P
   try {
     const truncatedText = pdfText.substring(0, 15000); // Limit input size
     const response = await client.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: SUMMARY_SYSTEM_PROMPT },
         { 
@@ -17,7 +17,7 @@ export const generateSummaryFromOpenAI = async (pdfText: string, retries = 3): P
         },
       ],
       temperature: 0.7,
-      max_tokens: 1500,
+      max_tokens: 1000,
     });
 
     if (!response.choices[0].message.content) {
