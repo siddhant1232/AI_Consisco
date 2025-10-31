@@ -1,14 +1,14 @@
 // actions/upload-action.ts
-'use server';
-import 'server-only';
+"use server";
+import "server-only";
 
-import { unstable_noStore as noStore } from 'next/cache';
-import { auth } from '@clerk/nextjs/server';
-import { fetchAndExtractPdfText } from '@/lib/langchain';
-import { generateSummaryFromOpenAI } from '@/lib/openai';
-import { generateSummaryFromGemini } from '@/lib/gemini';
+import { unstable_noStore as noStore } from "next/cache";
+import { auth } from "@clerk/nextjs/server";
+import { fetchAndExtractPdfText } from "@/lib/langchain";
+import { generateSummaryFromOpenAI } from "@/lib/openai";
+import { generateSummaryFromGemini } from "@/lib/gemini";
 // @ts-ignore: no type declarations for 'postgres'
-import postgres from 'postgres';
+import postgres from "postgres";
 
 interface PdfSummaryArgs {
   userId: string;
@@ -22,7 +22,7 @@ type SummaryResult = {
   success: boolean;
   message: string;
   data: string | null;
-  provider?: 'openai' | 'gemini';
+  provider?: "openai" | "gemini";
 };
 
 type ActionResult = {
@@ -30,24 +30,28 @@ type ActionResult = {
   message: string;
 };
 
-export async function generatePDFSummary(uploadResponse: any[]): Promise<SummaryResult> {
+export async function generatePDFSummary(
+  uploadResponse: any[],
+): Promise<SummaryResult> {
   noStore();
 
   if (!uploadResponse?.[0]?.serverData?.fileUrl) {
     return {
       success: false,
-      message: 'Invalid file URL structure',
+      message: "Invalid file URL structure",
       data: null,
     };
-    }
+  }
 
   try {
-    const pdfText = await fetchAndExtractPdfText(uploadResponse[0].serverData.fileUrl);
+    const pdfText = await fetchAndExtractPdfText(
+      uploadResponse[0].serverData.fileUrl,
+    );
 
     if (!pdfText || pdfText.trim().length < 50) {
       return {
         success: false,
-        message: 'Extracted text is too short or empty',
+        message: "Extracted text is too short or empty",
         data: null,
       };
     }
@@ -57,27 +61,27 @@ export async function generatePDFSummary(uploadResponse: any[]): Promise<Summary
       const summary = await generateSummaryFromOpenAI(pdfText);
       return {
         success: true,
-        message: 'Summary generated with OpenAI',
+        message: "Summary generated with OpenAI",
         data: summary,
-        provider: 'openai',
+        provider: "openai",
       };
     } catch (openaiError) {
-      console.warn('OpenAI failed, trying Gemini...', openaiError);
+      console.warn("OpenAI failed, trying Gemini...", openaiError);
 
       // Fallback to Gemini
       const summary = await generateSummaryFromGemini(pdfText);
       return {
         success: true,
-        message: 'Summary generated with Gemini',
+        message: "Summary generated with Gemini",
         data: summary,
-        provider: 'gemini',
+        provider: "gemini",
       };
     }
   } catch (error: any) {
-    console.error('PDF processing error:', error);
+    console.error("PDF processing error:", error);
     return {
       success: false,
-      message: error?.message || 'Failed to process PDF',
+      message: error?.message || "Failed to process PDF",
       data: null,
     };
   }
@@ -88,13 +92,13 @@ export async function storePdfSummaryAction({
   summary,
   title,
   fileName,
-}: Omit<PdfSummaryArgs, 'userId'>): Promise<ActionResult> {
+}: Omit<PdfSummaryArgs, "userId">): Promise<ActionResult> {
   noStore();
 
   try {
     const { userId } = await auth();
     if (!userId) {
-      return { success: false, message: 'User not found' };
+      return { success: false, message: "User not found" };
     }
 
     await savePdfSummary({
@@ -105,9 +109,10 @@ export async function storePdfSummaryAction({
       fileName,
     });
 
-    return { success: true, message: 'PDF summary saved' };
+    return { success: true, message: "PDF summary saved" };
   } catch (error) {
-    const msg = error instanceof Error ? error.message : 'Error saving PDF summary';
+    const msg =
+      error instanceof Error ? error.message : "Error saving PDF summary";
     return { success: false, message: msg };
   }
 }
@@ -139,7 +144,7 @@ async function savePdfSummary({
       )
     `;
   } catch (error) {
-    console.error('Error saving pdf summary', error);
+    console.error("Error saving pdf summary", error);
     throw error;
   }
 }
@@ -154,13 +159,16 @@ declare global {
 
 function getDbConnection() {
   if (!process.env.DATABASE_URL) {
-    throw new Error('Missing DATABASE_URL environment variable');
+    throw new Error("Missing DATABASE_URL environment variable");
   }
 
   if (!global.__pgsql) {
     global.__pgsql = postgres(process.env.DATABASE_URL, {
       // Many managed Postgres providers require SSL
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+      ssl:
+        process.env.NODE_ENV === "production"
+          ? { rejectUnauthorized: false }
+          : false,
       max: 5,
       idle_timeout: 60,
     });

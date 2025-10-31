@@ -1,8 +1,7 @@
-
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { forwardRef as reactForwardRef} from "react";
+import { forwardRef as reactForwardRef } from "react";
 
 interface UploadFormInputProps {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -10,7 +9,7 @@ interface UploadFormInputProps {
 }
 
 const UploadFormInput = reactForwardRef<HTMLFormElement, UploadFormInputProps>(
-  ({ onSubmit , isLoading }, ref) => {
+  ({ onSubmit, isLoading }, ref) => {
     return (
       <form ref={ref} className="flex flex-col gap-4" onSubmit={onSubmit}>
         <input
@@ -25,19 +24,18 @@ const UploadFormInput = reactForwardRef<HTMLFormElement, UploadFormInputProps>(
 
         <Button disabled={isLoading}>
           {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            processing...
-          </>
-          )
-            : (
-            "Upload your PDF")}
-          </Button>
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              processing...
+            </>
+          ) : (
+            "Upload your PDF"
+          )}
+        </Button>
       </form>
     );
-  }
+  },
 );
 UploadFormInput.displayName = "UploadFormInput";
 
 export default UploadFormInput;
-

@@ -10,7 +10,7 @@ import { Toaster } from "sonner";
 const fontSans = FontSans({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["200","300","400","500","600","700","800","900"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -18,7 +18,11 @@ export const metadata: Metadata = {
   description: "Consisco is a platform for summarizing pdf documents.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className={`${fontSans.variable} antialiased`}>
@@ -29,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </div>
         </ClientProviders>
-        <Toaster/> 
+        <Toaster />
       </body>
     </html>
   );

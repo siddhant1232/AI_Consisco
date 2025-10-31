@@ -1,25 +1,24 @@
 // upload-form.tsx
-'use client';
+"use client";
 import UploadFormInput from "./upload-form-input";
 import { z } from "zod";
 import { useUploadThing } from "@/utils/uploadthing";
 import { toast } from "sonner";
 import { generatePDFSummary } from "@/actions/upload-action";
-import { useRef ,useState} from "react";
+import { useRef, useState } from "react";
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
 const ACCEPTED_FILE_TYPES = ["application/pdf"];
 
 const schema = z.object({
-  file: z.instanceof(File, { message: "Invalid file" })
-    .refine(
-      (file) => file.size <= MAX_FILE_SIZE, 
-      { message: `File size should be less than ${MAX_FILE_SIZE / 1024 / 1024}MB` }
-    )
-    .refine(
-      (file) => ACCEPTED_FILE_TYPES.includes(file.type), 
-      { message: "Only PDF files are accepted" }
-    ),  
+  file: z
+    .instanceof(File, { message: "Invalid file" })
+    .refine((file) => file.size <= MAX_FILE_SIZE, {
+      message: `File size should be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`,
+    })
+    .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), {
+      message: "Only PDF files are accepted",
+    }),
 });
 
 export default function UploadForm() {
@@ -44,7 +43,7 @@ export default function UploadForm() {
       // Upload phase
       const uploadToast = toast.loading("Uploading PDF...");
       const res = await startUpload([file]);
-      
+
       if (!res?.[0]?.serverData) {
         throw new Error("Upload failed - no server data");
       }
@@ -59,18 +58,21 @@ export default function UploadForm() {
         throw new Error(result.message);
       }
 
-      toast.success(`Summary generated with ${result.provider?.toUpperCase() || 'AI'}`, { 
-        id: processToast,
-        action: {
-          label: "View",
-          onClick: () => console.log(result.data) // Replace with actual view logic
-        }
-      });
+      toast.success(
+        `Summary generated with ${result.provider?.toUpperCase() || "AI"}`,
+        {
+          id: processToast,
+          action: {
+            label: "View",
+            onClick: () => console.log(result.data), // Replace with actual view logic
+          },
+        },
+      );
 
       formRef.current?.reset();
     } catch (error: any) {
       toast.error("Processing failed", {
-        description: error.message || "An unknown error occurred"
+        description: error.message || "An unknown error occurred",
       });
     } finally {
       setIsLoading(false);
@@ -79,10 +81,10 @@ export default function UploadForm() {
 
   return (
     <div>
-      <UploadFormInput 
+      <UploadFormInput
         isLoading={isLoading}
         ref={formRef}
-        onSubmit={handleSubmit} 
+        onSubmit={handleSubmit}
       />
     </div>
   );

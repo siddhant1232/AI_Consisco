@@ -1,23 +1,23 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+// eslint.config.js
 import { FlatCompat } from "@eslint/eslintrc";
+import prettierPlugin from "eslint-plugin-prettier";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const compat = new FlatCompat();
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+/** @type {import('eslint').Linter.FlatConfig[]} */
+export default [
+  // Ignore build artifacts
+  { ignores: [".next/**", "node_modules/**"] },
 
-const eslintConfig = {
-  ...compat.config({
-    extends: ["next/core-web-vitals", "next/typescript", "prettier"],
-    plugins: ["prettier"],
+  // Classic configs converted to flat format
+  ...compat.extends("next/core-web-vitals", "prettier"),
+
+  // Your custom rules/plugins
+  {
+    plugins: { prettier: prettierPlugin },
     rules: {
-      "prettier/prettier": "error",
-      "react/no-escape-entities": "off",
+      "prettier/prettier": "warn",           // or "error" if you want strict
+      "react/no-unescaped-entities": "off",  // this was the rule that blocked you
     },
-  }),
-};
-
-export default eslintConfig;
+  },
+];

@@ -8,7 +8,9 @@ export async function fetchAndExtractPdfText(fileUrl: string): Promise<string> {
 
     const response = await fetch(fileUrl);
     if (!response.ok) {
-      throw new Error(`Failed to fetch PDF: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch PDF: ${response.status} ${response.statusText}`,
+      );
     }
     const contentType = response.headers.get("content-type") || "";
     if (!contentType.includes("application/pdf")) {

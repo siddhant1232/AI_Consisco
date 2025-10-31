@@ -25,14 +25,16 @@ export default function HeroSection() {
         {/* Main Heading */}
         <h1 className="font-bold text-4xl sm:text-5xl lg:text-6xl text-center py-6 mb-4">
           <span>
-            Transform PDFs into{' '}
-             <span className="relative z-10 px-2">concise
-            <span className="absolute inset-0 bg-rose-200/50 -rotate-2 rounded-lg transform -skew-y-1 "
-            aria-hidden="true"
-            ></span>{' '}
+            Transform PDFs into{" "}
+            <span className="relative z-10 px-2">
+              concise
+              <span
+                className="absolute inset-0 bg-rose-200/50 -rotate-2 rounded-lg transform -skew-y-1 "
+                aria-hidden="true"
+              ></span>{" "}
             </span>
-             summaries
-            </span>
+            summaries
+          </span>
         </h1>
 
         {/* Subheading */}
@@ -41,9 +43,7 @@ export default function HeroSection() {
         </h2>
 
         {/* CTA Button */}
-        <Button
-          className="mt-6 text-base sm:text-lg lg:text-xl rounded-full px-8 sm:px-12 lg:px-16 py-6 sm:py-8 lg:py-10 bg-gradient-to-r from-slate-900 to-rose-600 hover:from-rose-600 hover:to-slate-900 text-white font-bold shadow-lg transition-all duration-300 group"
-        >
+        <Button className="mt-6 text-base sm:text-lg lg:text-xl rounded-full px-8 sm:px-12 lg:px-16 py-6 sm:py-8 lg:py-10 bg-gradient-to-r from-slate-900 to-rose-600 hover:from-rose-600 hover:to-slate-900 text-white font-bold shadow-lg transition-all duration-300 group">
           <Link className="flex gap-2 items-center" href="/#pricing">
             <span>Try Consisco</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

@@ -12,7 +12,8 @@ export default function CTAsection() {
               Ready to save hours of time?
             </h2>
             <p className="max-w-2xl mx-auto text-gray-600 text-lg sm:text-xl">
-              Transform lengthy documents into clear, actionable insights with our AI-powered summarizer.
+              Transform lengthy documents into clear, actionable insights with
+              our AI-powered summarizer.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row justify-center">
@@ -22,7 +23,10 @@ export default function CTAsection() {
               hover:from-rose-500 hover:to-slate-900 text-white transition-all duration-300 flex items-center justify-center gap-2"
               variant="link"
             >
-              <Link href="/#pricing" className="flex items-center no-underline hover:no-underline gap-2">
+              <Link
+                href="/#pricing"
+                className="flex items-center no-underline hover:no-underline gap-2"
+              >
                 Get Started
                 <ArrowRight className="w-5 h-5 animate-pulse" />
               </Link>
