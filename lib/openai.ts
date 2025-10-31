@@ -17,7 +17,7 @@ export const generateSummaryFromOpenAI = async (pdfText: string, retries = 3): P
         },
       ],
       temperature: 0.7,
-      max_tokens: 1000,
+      max_tokens: 1500,
     });
 
     if (!response.choices[0].message.content) {
