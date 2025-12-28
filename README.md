@@ -1,3 +1,5 @@
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/11663/badge)](https://www.bestpractices.dev/projects/11663)
+
 Conciso is an AI-powered web application that summarizes large PDF documents into concise, readable summaries, helping users quickly understand key points without reading entire files.
 
 ## Contribution Guidelines
