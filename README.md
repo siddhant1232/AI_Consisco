@@ -26,3 +26,4 @@ Conciso is an AI-powered PDF summarization web application that allows users to 
 
 ### Outputs
 - Text-based summarized content
+
