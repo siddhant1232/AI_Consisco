@@ -22,9 +22,9 @@ export const generateSummaryFromOpenAI = async (
       temperature: 0.7,
       max_tokens: 1500,
     });
-
     if (!response.choices[0].message.content) {
       throw new Error("Response content is null");
+      console.error("OpenAI API returned null content");
     }
     return response.choices[0].message.content;
   } catch (error: any) {
