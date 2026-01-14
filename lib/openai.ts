@@ -33,6 +33,5 @@ export const generateSummaryFromOpenAI = async (
       return generateSummaryFromOpenAI(pdfText, retries - 1);
     }
     throw error;
-    toast.error("Failed to generate summary with OpenAI.");
   }
 };
