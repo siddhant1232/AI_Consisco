@@ -1,6 +1,7 @@
 // openai.ts
 import OpenAI from "openai";
 import { SUMMARY_SYSTEM_PROMPT } from "@/utils/prompts";
+import { toast } from "sonner";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -24,7 +25,6 @@ export const generateSummaryFromOpenAI = async (
     });
     if (!response.choices[0].message.content) {
       throw new Error("Response content is null");
-      console.error("OpenAI API returned null content");
     }
     return response.choices[0].message.content;
   } catch (error: any) {
@@ -33,5 +33,6 @@ export const generateSummaryFromOpenAI = async (
       return generateSummaryFromOpenAI(pdfText, retries - 1);
     }
     throw error;
+    toast.error("Failed to generate summary with OpenAI.");
   }
 };
