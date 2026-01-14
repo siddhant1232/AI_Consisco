@@ -13,7 +13,6 @@ export const generateSummaryFromGemini = async (pdfText: string) => {
         maxOutputTokens: 1500,
       },
     });
-
     const prompt = `${SUMMARY_SYSTEM_PROMPT}\n\nTransform this document into an engaging, easy-to-read summary with contextually relevant emojis and proper markdown formatting:\n\n${pdfText}`;
 
     const result = await model.generateContent(prompt);
