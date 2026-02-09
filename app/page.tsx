@@ -1,4 +1,4 @@
-// final page for home page, we will add all the sections here
+
 import HeroSection from "@/components/home/hero-section";
 import BgGradient from "@/components/common/bg-gradient";
 import DemoSection from "@/components/home/demo-section";
@@ -9,7 +9,6 @@ export default function Home() {
   return (
     <div className="relative w-full">
       <BgGradient />
-       {/* // background gradient */}
       <div className="flex flex-col">
         <HeroSection />
         <DemoSection />
