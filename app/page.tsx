@@ -1,3 +1,4 @@
+// final page for home page, we will add all the sections here
 import HeroSection from "@/components/home/hero-section";
 import BgGradient from "@/components/common/bg-gradient";
 import DemoSection from "@/components/home/demo-section";
