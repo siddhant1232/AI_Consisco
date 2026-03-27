@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import postgres from "postgres";
 
-const sql = postgres(process.env.DATABASE_URL as string, {
+const sql = postgres(process.env.DATABASE_URL || "postgres://localhost", {
   ssl: "require",
 });
 

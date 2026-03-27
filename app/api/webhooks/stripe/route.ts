@@ -3,12 +3,12 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import postgres from "postgres";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_123", {
   apiVersion: "2025-01-27.acacia" as any, // Using typical stripe version
 });
 
 // Reuse connection setup directly for webhook without Next.js cache conflicts
-const sql = postgres(process.env.DATABASE_URL as string, {
+const sql = postgres(process.env.DATABASE_URL || "postgres://localhost", {
   ssl: "require",
 });
 
