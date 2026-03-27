@@ -79,7 +79,7 @@ export async function POST(req: Request) {
   }
 
   if (event.type === "invoice.payment_succeeded") {
-    // Renewal logic here
+
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string
     );
