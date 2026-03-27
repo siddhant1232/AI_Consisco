@@ -67,7 +67,9 @@ export async function POST(req: Request) {
 
   if (eventType === "user.deleted") {
     try {
-      await sql`DELETE FROM users WHERE id = ${evt.data.id}`;
+      if (evt.data.id) {
+        await sql`DELETE FROM users WHERE id = ${evt.data.id as string}`;
+      }
     } catch (err) {
       console.error("Failed to delete user:", err);
     }

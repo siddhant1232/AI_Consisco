@@ -5,17 +5,14 @@ import { FileText, Calendar, Clock, ChevronLeft, ExternalLink, Download, Sparkle
 import Link from "next/link";
 import SummaryCarousel from "@/components/summary/carousel";
 
-export default async function SummaryDetailsPage({
-  params,
-}: {
-  params: { id: string };
+export default async function SummaryDetailsPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await props.params;
   const { userId } = await auth();
   if (!userId) {
     return null;
   }
-
-  const { id } = await params;
 
   let sql;
   try {
