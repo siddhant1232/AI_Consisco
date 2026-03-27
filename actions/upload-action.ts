@@ -2,7 +2,7 @@
 "use server";
 import "server-only";
 
-import { unstable_noStore as noStore } from "next/cache";
+import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 import { auth } from "@clerk/nextjs/server";
 import { fetchAndExtractPdfText } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
@@ -154,7 +154,7 @@ async function savePdfSummary({
 declare global {
   // Avoid creating new connections across HMR/serverless cold starts
   // eslint-disable-next-line no-var
-  var __pgsql: any | undefined;
+  var __pgsql_tls: any | undefined;
 }
 
 function getDbConnection() {
@@ -162,17 +162,26 @@ function getDbConnection() {
     throw new Error("Missing DATABASE_URL environment variable");
   }
 
-  if (!global.__pgsql) {
-    global.__pgsql = postgres(process.env.DATABASE_URL, {
-      // Many managed Postgres providers require SSL
-      ssl:
-        process.env.NODE_ENV === "production"
-          ? { rejectUnauthorized: false }
-          : false,
+  if (!global.__pgsql_tls) {
+    global.__pgsql_tls = postgres(process.env.DATABASE_URL, {
+      ssl: "require",
       max: 5,
       idle_timeout: 60,
     });
   }
 
-  return global.__pgsql;
+  return global.__pgsql_tls;
+}
+
+export async function deleteSummaryAction(id: string): Promise<void> {
+  try {
+    const { userId } = await auth();
+    if (!userId) return;
+
+    const sql = getDbConnection();
+    await sql`DELETE FROM pdf_summaries WHERE id = ${id} AND user_id = ${userId}`;
+    revalidatePath("/dashboard");
+  } catch (error) {
+    console.error("Failed to delete summary:", error);
+  }
 }

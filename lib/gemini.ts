@@ -7,7 +7,7 @@ import { SUMMARY_SYSTEM_PROMPT } from "@/utils/prompts";
 export const generateSummaryFromGemini = async (pdfText: string) => {
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-thinking-exp-01-21",
+      model: "gemini-2.5-flash-lite",
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 1500,

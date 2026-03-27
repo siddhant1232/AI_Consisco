@@ -4,8 +4,9 @@ import UploadFormInput from "./upload-form-input";
 import { z } from "zod";
 import { useUploadThing } from "@/utils/uploadthing";
 import { toast } from "sonner";
-import { generatePDFSummary } from "@/actions/upload-action";
+import { generatePDFSummary, storePdfSummaryAction } from "@/actions/upload-action";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
 const ACCEPTED_FILE_TYPES = ["application/pdf"];
@@ -25,6 +26,7 @@ export default function UploadForm() {
   const { startUpload } = useUploadThing("pdfUploader");
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,20 +56,31 @@ export default function UploadForm() {
       const processToast = toast.loading("Generating summary...");
       const result = await generatePDFSummary(res);
 
-      if (!result.success) {
+      if (!result.success || !result.data) {
         throw new Error(result.message);
       }
 
+      // Save to database
+      const saveResult = await storePdfSummaryAction({
+        fileUrl: res[0].serverData.fileUrl,
+        summary: result.data,
+        title: file.name.replace(/\.pdf$/i, ""),
+        fileName: file.name,
+      });
+
+      if (!saveResult.success) {
+        throw new Error(saveResult.message);
+      }
+
       toast.success(
-        `Summary generated with ${result.provider?.toUpperCase() || "AI"}`,
-        {
-          id: processToast,
-          action: {
-            label: "View",
-            onClick: () => console.log(result.data), // Replace with actual view logic
-          },
-        },
+        `Summary generated securely!`,
+        { id: processToast }
       );
+
+      formRef.current?.reset();
+      
+      // Redirect to summaries page
+      router.push("/dashboard");
 
       formRef.current?.reset();
     } catch (error: any) {
