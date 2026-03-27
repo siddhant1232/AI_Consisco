@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { createCheckoutSession } from "@/actions/stripe-action";
 import { cn } from "@/lib/utils";
 import { ArrowRight, CheckIcon } from "lucide-react";
 type price = {
@@ -7,7 +7,6 @@ type price = {
   description: string;
   items: string[];
   id: string;
-  paymentLink: string;
   priceId: string;
 };
 
@@ -19,7 +18,7 @@ const plans = [
     description: "perfect for ocational use",
     items: ["5 PDF per month", "Standard processing speed", "Email support"],
     paymentLink: "https://buy.stripe.com/3csbJY2aQ4kK0cE5k1",
-    priceId: "price_1NQ0v2K3x4kK0cE5k1",
+    priceId: "price_1TFWfAJwSIPQasXD2qsZxopC",
   },
   {
     id: "pro",
@@ -33,7 +32,7 @@ const plans = [
       "Markdown export",
     ],
     paymentLink: "https://buy.stripe.com/3csbJY2aQ4kK0cE5k1",
-    priceId: "price_1NQ0v2K3x4kK0cE5k1",
+    priceId: "price_1TFWkMJwSIPQasXDUtgaNR2i",
   },
 ];
 
@@ -43,8 +42,9 @@ const PricingCard = ({
   description,
   items,
   id,
-  paymentLink,
+  priceId,
 }: price) => {
+  const checkoutAction = createCheckoutSession.bind(null, priceId);
   return (
     <div className="relative w-full max-w-lg hover:scale-105 hover:transition-all duration-300">
       <div
@@ -77,18 +77,20 @@ const PricingCard = ({
         </div>
 
         <div className="space-y-2 flex justify-center w-full ">
-          <Link
-            href={paymentLink}
-            className={cn(
-              "w-full rounded-full flex items-center justify-center gap-2 bg-linear-to-r from-rose-800 to-rose-500 text-white hover:bg-linear-to-l hover:from-rose-800 hover:to-rose-500 border-2 py-2",
-              id === "pro"
-                ? "border-rose-900"
-                : "border-rose-100 from-rose-400 to-rose-500",
-            )}
-          >
-            Buy Now
-            <ArrowRight />
-          </Link>
+          <form action={checkoutAction} className="w-full">
+            <button
+              type="submit"
+              className={cn(
+                "w-full rounded-full flex items-center justify-center gap-2 bg-linear-to-r from-rose-800 to-rose-500 text-white hover:bg-linear-to-l hover:from-rose-800 hover:to-rose-500 border-2 py-2 cursor-pointer",
+                id === "pro"
+                  ? "border-rose-900"
+                  : "border-rose-100 from-rose-400 to-rose-500",
+              )}
+            >
+              Buy Now
+              <ArrowRight />
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -113,7 +115,6 @@ export default function PricingSection() {
               description={plan.description}
               items={plan.items}
               id={plan.id}
-              paymentLink={plan.paymentLink}
               priceId={plan.priceId}
             />
           ))}
